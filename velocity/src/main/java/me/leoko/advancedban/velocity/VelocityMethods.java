@@ -25,7 +25,6 @@ import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import ninja.leaping.configurate.ConfigurationNode;
 import ninja.leaping.configurate.objectmapping.ObjectMappingException;
 import ninja.leaping.configurate.yaml.YAMLConfigurationLoader;
-import org.checkerframework.checker.nullness.qual.NonNull;
 import org.slf4j.Logger;
 
 import java.io.File;
@@ -48,7 +47,7 @@ public class VelocityMethods extends AbstractMethodInterface<ConfigurationNode> 
   private boolean luckPermsSupport;
 
   public VelocityMethods(Path dataDirectory,
-                         final @NonNull ProxyServer server,
+                         final ProxyServer server,
                          Logger logger) {
     super(dataDirectory);
     this.dataDirectory = dataDirectory;
