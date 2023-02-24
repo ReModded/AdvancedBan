@@ -50,7 +50,7 @@ public class PunishmentTest {
         int id = punishment.getId();
         System.out.println("Punishment ID >> "+id);
         DatabaseManager.get().shutdown();
-        DatabaseManager.get().setup(false);
+        DatabaseManager.get().setup(DatabaseManager.Type.H2);
         Punishment punishment1 = PunishmentManager.get().getPunishment(id);
         assertNotNull(punishment1, "Punishment should exist");
         assertEquals("Persistence test", punishment1.getReason(), "Reason should still match");
@@ -67,7 +67,7 @@ public class PunishmentTest {
                 "Punishment should be cached after user is loaded");
         assertTrue(PunishmentManager.get().isBanned("cache"), "Punishment should be still active when in cache");
     }
-    
+
     @Test
     public void shouldBlockBasicCommandsIncludingColons() {
         Universal universal = Universal.get();
@@ -81,7 +81,7 @@ public class PunishmentTest {
         assertFalse(universal.isMuteCommand("replyall", muteCommands),
                 "Command not in the mute commands list, but similar to a command in the list, should not be blocked");
     }
-    
+
     @Test
     public void shouldBlockCommandsStartingWithMuteCommandWords() {
         Universal universal = Universal.get();

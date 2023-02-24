@@ -26,10 +26,9 @@ import java.util.Arrays;
 public class DatabaseManager {
 
     private HikariDataSource dataSource;
-    private boolean useMySQL;
-
+    private Type databaseType;
     private RowSetFactory factory;
-    
+
     private static DatabaseManager instance = null;
 
     /**
@@ -44,12 +43,12 @@ public class DatabaseManager {
     /**
      * Initially connects to the database and sets up the required tables of they don't already exist.
      *
-     * @param useMySQLServer whether to preferably use MySQL (uses HSQLDB as fallback)
+     * @param databaseType type of preferably (uses HSQLDB as fallback)
      */
-    public void setup(boolean useMySQLServer) {
-        useMySQL = useMySQLServer;
+    public void setup(Type databaseType) {
+        this.databaseType = databaseType;
 
-        dataSource = new DynamicDataSource(useMySQL).generateDataSource();
+        dataSource = new DynamicDataSource(databaseType).generateDataSource();
 
         executeStatement(SQLQuery.CREATE_TABLE_PUNISHMENT);
         executeStatement(SQLQuery.CREATE_TABLE_PUNISHMENT_HISTORY);
@@ -59,7 +58,7 @@ public class DatabaseManager {
      * Shuts down the HSQLDB if used.
      */
     public void shutdown() {
-        if (!useMySQL) {
+        if (databaseType == Type.H2) {
             try (Connection connection = dataSource.getConnection();
                     PreparedStatement statement = connection.prepareStatement("SHUTDOWN")) {
                 statement.execute();
@@ -70,7 +69,7 @@ public class DatabaseManager {
 
         dataSource.close();
     }
-    
+
     private CachedRowSet createCachedRowSet() throws SQLException {
     	if (factory == null) {
     		factory = RowSetProvider.newFactory();
@@ -136,7 +135,38 @@ public class DatabaseManager {
      *
      * @return whether MySQL is used
      */
-    public boolean isUseMySQL() {
-        return useMySQL;
+    public Type getDatabaseType() {
+        return this.databaseType;
+    }
+
+
+    public enum Type {
+        MySQL("mysql", "org.mariadb.jdbc.Driver", "external"),
+        PostgreSQL("pgsql", "com.impossibl.postgres.jdbc.PGDriver", "external"),
+        H2("hsqldb", "org.hsqldb.jdbc.JDBCDriver", "local");
+
+        private final String jdbcProtocol;
+        private final String jdbcDriver;
+
+        private final String dbType;
+
+        Type(String jdbcProtocol, String jdbcDriver, String dbType) {
+            this.jdbcProtocol = jdbcProtocol;
+            this.jdbcDriver = jdbcDriver;
+            this.dbType = dbType;
+        }
+
+        public String getJdbcProtocol() {
+            return jdbcProtocol;
+        }
+
+        public String getJdbcDriver() {
+            return jdbcDriver;
+        }
+
+        @Override
+        public String toString() {
+            return name() + " (" + dbType + ")";
+        }
     }
 }

@@ -4,10 +4,10 @@
 # For more information visit: https://www.spigotmc.org/resources/advancedban.8695/
 # Do you want your own Plugin or Website? Check out our Dev-Page: http://dev.skamps.eu
 
-# If set to false all bans will be saved locally in a HSQLDB-Database
-UseMySQL: false
+# Type of used database (H2, MySQL (MariaDB), PostgreSQL)
+DatabaseType: H2
 
-MySQL:
+Database:
   IP: localhost
   DB-Name: database-name
   Username: admin
@@ -128,7 +128,7 @@ TempPerms:
   3: 43200
 
 # With this active will show more information in the console, such as errors, if
-# the plugin works correctly is not recommended to activate it since it is 
+# the plugin works correctly is not recommended to activate it since it is
 # designed to find bugs.
 Debug: false
 

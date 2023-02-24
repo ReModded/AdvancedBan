@@ -61,7 +61,7 @@ public class Universal {
         UpdateManager.get().setup();
         UUIDManager.get().setup();
 
-        DatabaseManager.get().setup(mi.getBoolean(mi.getConfig(), "UseMySQL", false));
+        DatabaseManager.get().setup(DatabaseManager.Type.valueOf(mi.getString(mi.getConfig(), "DatabaseType", DatabaseManager.Type.H2.name())));
 
         mi.setupMetrics();
         PunishmentManager.get().setup();
@@ -86,7 +86,7 @@ public class Universal {
                     + "\n&8|   &cName: &7AdvancedBan"
                     + "\n&8|   &cDeveloper: &7Leoko"
                     + "\n&8|   &cVersion: &7" + mi.getVersion()
-                    + "\n&8|   &cStorage: &7" + (DatabaseManager.get().isUseMySQL() ? "MySQL (external)" : "HSQLDB (local)")
+                    + "\n&8|   &cStorage: &7" + DatabaseManager.get().getDatabaseType().toString()
                     + "\n&8| &cSupport:"
                     + "\n&8|   &cGithub: &7https://github.com/DevLeoko/AdvancedBan/issues"
                     + "\n&8|   &cDiscord: &7https://discord.gg/ycDG6rS"
@@ -112,7 +112,7 @@ public class Universal {
                     + "\n&8|   &cName: &7AdvancedBan"
                     + "\n&8|   &cDeveloper: &7Leoko"
                     + "\n&8|   &cVersion: &7" + getMethods().getVersion()
-                    + "\n&8|   &cStorage: &7" + (DatabaseManager.get().isUseMySQL() ? "MySQL (external)" : "HSQLDB (local)")
+                    + "\n&8|   &cStorage: &7" + DatabaseManager.get().getDatabaseType().toString()
                     + "\n&8| &cSupport:"
                     + "\n&8|   &cGithub: &7https://github.com/DevLeoko/AdvancedBan/issues"
                     + "\n&8|   &cDiscord: &7https://discord.gg/ycDG6rS"
@@ -196,7 +196,7 @@ public class Universal {
 
     /**
      * Visible for testing. Do not use this. Please use {@link #isMuteCommand(String)}.
-     * 
+     *
      * @param cmd          the command
      * @param muteCommands the mute commands from the config
      * @return true if the command matched any of the mute commands.
@@ -217,7 +217,7 @@ public class Universal {
 
     /**
      * Visible for testing. Do not use this.
-     * 
+     *
      * @param commandWords the command run by a player, separated into its words
      * @param muteCommand a mute command from the config
      * @return true if they match, false otherwise

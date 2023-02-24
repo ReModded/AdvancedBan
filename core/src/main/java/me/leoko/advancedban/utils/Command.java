@@ -513,7 +513,7 @@ public enum Command {
                 mi.sendMessage(sender, "  §cStatus §8• §a§oStable");
                 mi.sendMessage(sender, "  §cVersion §8• §7" + mi.getVersion());
                 mi.sendMessage(sender, "  §cLicense §8• §7Public");
-                mi.sendMessage(sender, "  §cStorage §8• §7" + (DatabaseManager.get().isUseMySQL() ? "MySQL (external)" : "HSQLDB (local)"));
+                mi.sendMessage(sender, "  §cStorage §8• §7" + DatabaseManager.get().getDatabaseType().toString());
                 mi.sendMessage(sender, "  §cServer §8• §7" + Universal.get().getServerType().toString());
                 if (Universal.get().isProxy() && Universal.get().getServerType() == ServerType.BUNGEECORD) {
                     mi.sendMessage(sender, "  §cRedisBungee §8• §7" + (Universal.isRedis() ? "true" : "false"));
@@ -560,7 +560,7 @@ public enum Command {
 
     public TabCompleter getTabCompleter() {
         MethodInterface mi = Universal.get().getMethods();
-        if (!mi.getBoolean(mi.getConfig(), "Use Tab Completion", true)) 
+        if (!mi.getBoolean(mi.getConfig(), "Use Tab Completion", true))
             return NULL_TAB_COMPLETER;
         return tabCompleter;
     }
