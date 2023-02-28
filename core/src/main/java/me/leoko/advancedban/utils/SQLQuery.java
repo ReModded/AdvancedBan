@@ -20,7 +20,7 @@ public enum SQLQuery {
             "PRIMARY KEY (`id`))",
 
             "CREATE TABLE IF NOT EXISTS Punishments (" +
-            "id int PRIMARY KEY," +
+            "id serial PRIMARY KEY AUTOINCREMENT," +
             "name VARCHAR(16) NULL DEFAULT NULL," +
             "uuid VARCHAR(35) NULL DEFAULT NULL," +
             "reason VARCHAR(255) NULL DEFAULT NULL," +
@@ -55,7 +55,7 @@ public enum SQLQuery {
             "PRIMARY KEY (`id`))",
 
             "CREATE TABLE IF NOT EXISTS PunishmentHistory (" +
-            "id int PRIMARY KEY," +
+            "id serial PRIMARY KEY," +
             "name VARCHAR(16) NULL DEFAULT NULL," +
             "uuid VARCHAR(35) NULL DEFAULT NULL," +
             "reason VARCHAR(255) NULL DEFAULT NULL," +
