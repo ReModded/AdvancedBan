@@ -291,9 +291,15 @@ public enum Command {
                 else
                     return list();
             }),
-            new ListProcessor(
-                    target -> PunishmentManager.get().getPunishments(target, null, false),
-                    "History", true, true),
+            input -> {
+                MethodInterface mi = Universal.get().getMethods();
+                List<PunishmentType> putList = new ArrayList<>();
+                mi.getStringList(mi.getConfig(),"FullHistory").forEach((typeString -> putList.add(PunishmentType.valueOf(typeString))));
+
+                new ListProcessor(
+                        target -> PunishmentManager.get().getPunishmentsOfTypes(target, putList, false),
+                        "History", true, true).accept(input);
+            },
             "History.Usage",
             "history"),
 
@@ -301,7 +307,7 @@ public enum Command {
             "\\S+( [1-9][0-9]*)?|\\S+|",
             new CleanTabCompleter((user, args) -> {
                 if(args.length == 1)
-                    if(Universal.get().getMethods().hasPerms(user, "ab.notes.other"))
+                    if(Universal.get().getMethods().hasPerms(user, "ab.warns.other"))
                         return list(CleanTabCompleter.PLAYER_PLACEHOLDER, "<Name>", "<Page>");
                     else
                         return list("<Page>");
